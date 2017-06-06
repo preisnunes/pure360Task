@@ -1,6 +1,13 @@
 {
     "require": {
         "slim/slim": "^3.0",
-        "robmorgan/phinx": "^0.8.0"
+        "robmorgan/phinx": "^0.8.0",
+        "guzzlehttp/guzzle": "^6.2",
+        "alchemy/zippy": "^0.4.8",
+        "predis/predis": "^1.1",
+        "slim/pdo": "^1.10"
+    },
+    "require-dev": {
+        "codeception/codeception": "^2.3"
     }
 }
