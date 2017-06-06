@@ -1,126 +1,152 @@
 <?php
 
+namespace pureTask;
+
 use Predis\Client as RedisClient;
-
-
-$structure = ['ipStart', 'ipEnd', 'longitudeId', 'latitudeId', 'countryCode', 'country'];
-$csv = new CountryIpCsv('/Users/pedronunes/Documents/Sites/pure360Task/data/GeoIPCountryWhois.csv',$structure,'CountryIpData' );
-$csv->loop();
-
-
-class CountryIpCsv{
-
-    private $csvPath;
-
-    private $structure;
-
-    private $register;
-
-    private $propertiesOrder;
-
-    public function __construct($csvPath, array $structure, $register){
-
-        $this->csvPath = $csvPath;
-        $this->structure = $structure;
-        $this->register = $register;
-        $registerReflection = new ReflectionMethod($register, '__construct');
-
-        foreach( $registerReflection->getParameters() as $parameter ){
-            $this->propertiesOrder[] = $parameter->getName();
-        }
-
-        var_dump($this->propertiesOrder);
-
-
-    }
-
-    public function loop(){
-
-        $row = 1;
-
-        if (($handle = fopen($this->csvPath, 'r')) !== FALSE) {
-            while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
-
-                $csvOrder = array_combine($this->structure, $data);
-                $parameters = [];
-                foreach( $this->propertiesOrder as $property ){
-                    $parameters[] = $csvOrder[$property];
-                }
-
-                $entity = (new ReflectionClass( $this->register ))->newInstanceArgs($parameters);
-
-                $entity->insert();
-
-                ++$row;
-
-            }
-            fclose($handle);
-        }
-    }
-
-}
-
-
-
+use \pureTask\Mysql as Mysql;
 
 class CountryIpData{
 
+    /**
+     * Start ip string
+     * @var string
+     */
     protected $ipStart;
 
+    /**
+     * End ip string
+     * @var string
+     */
     protected $ipEnd;
 
+    /**
+     * Longitude id
+     * @var int
+     */
     protected $longitudeId;
 
+    /**
+     * Latitude Id
+     * @int
+     */
     protected $latitudeId;
 
+    /**
+     * Country Code
+     * @var string
+     */
     protected $countryCode;
 
+    /**
+     * Country name
+     * @var string
+     */
     protected $country;
 
+    /**
+     * Table name that keep countries ip data
+     * @var string
+     */
+    public static $tableName = 'ipcountry';
+
+    /**
+     * Table columns order
+     * @var array
+     */
+    protected static $columns = ['ip_start', 'ip_end', 'longitude_id', 'latitude_id', 'country_code','country' ];
+
+    /**
+     * Set ipStart
+     * @param $ipStart
+     */
     public function setIpStart($ipStart){
         $this->ipStart = (string)$ipStart;
     }
 
+    /**
+     * Get ipStart
+     * @return string
+     */
     public function getIpStart(){
         return $this->ipStart;
     }
 
+    /**
+     * Set ipEnd
+     * @param string $ipEnd
+     */
     public function setIpEnd($ipEnd){
         $this->ipEnd = (string)$ipEnd;
     }
 
+    /**
+     * Get ip end
+     * @return string
+     */
     public function getIpEnd(){
         return $this->ipEnd;
     }
 
+    /**
+     * Set longitude id
+     * @param int $longitudeId
+     */
     public function setLongitudeId($longitudeId){
         $this->longitudeId = (int)$longitudeId;
     }
 
+    /**
+     * Get longitude id
+     * @return int
+     */
     public function getLongitudeId(){
         return $this->longitudeId;
     }
 
+    /**
+     * Set latitude id
+     * @param int $latitudeId
+     */
     public function setLatitudeId($latitudeId){
         $this->latitudeId = (int)$latitudeId;
     }
 
+    /**
+     * Get latitude id
+     * @return int
+     */
     public function getLatitudeId(){
         return $this->latitudeId;
     }
 
+    /**
+     * Set country code
+     * @param $countryCode
+     */
     public function setCountryCode($countryCode){
         $this->countryCode = (string)$countryCode;
     }
 
+    /**
+     * Get country code
+     * @return string
+     */
     public function getCountryCode(){
         return $this->countryCode;
     }
 
+    /**
+     * Set country
+     * @param $country
+     */
     public function setCountry($country){
         $this->country = (string)$country;
     }
 
+    /**
+     * Get country
+     * @return string
+     */
     public function getCountry(){
         return $this->country;
     }
@@ -133,28 +159,47 @@ class CountryIpData{
         $this->setLatitudeId($latitudeId);
         $this->setCountryCode($countryCode);
         $this->setCountry($country);
-
-
     }
 
+    /**
+     * Get array with columns and its values combined
+     * @return array
+     */
     public function getColumns(){
 
-        return [
-            'ip_start' => $this->getIpStart(),
-            'ip_end' => $this->getIpEnd(),
-            'longitude_id' => $this->getLongitudeId(),
-            'latitude_id' => $this->getLatitudeId(),
-            'country_code' => $this->getCountryCode(),
-            'country' => $this->getCountry()
+        $values = [
+            $this->getIpStart(),
+            $this->getIpEnd(),
+            $this->getLongitudeId(),
+            $this->getLatitudeId(),
+            $this->getCountryCode(),
+            $this->getCountry()
         ];
+
+        return array_combine(static::$columns, $values);
     }
 
+    /**
+     * Returns class name to be used on csv imports for instance
+     * @return string
+     */
+    public static function getClassName(){
+        return __CLASS__;
+    }
+
+    /**
+     * Insert Country ip into table
+     */
     public function insert(){
 
         $registerToInsert = $this->getColumns();
-        $sql = "INSERT INTO ipcountry (" . implode(',', array_keys($registerToInsert)) . ")
-                VALUES( " . implode(',', array_values($registerToInsert)) . " )";
-        var_dump($sql);
+
+        $insert = Mysql::getInstance()->insert(array_keys($registerToInsert))
+                            ->into(static::$tableName)
+                            ->values(array_values($registerToInsert));
+
+        $insert->execute();
+
     }
 
 
