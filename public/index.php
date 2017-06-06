@@ -1,6 +1,6 @@
 <?php
 
-require '../src/include.php';
+require __DIR__ . '/../include.php';
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
@@ -16,7 +16,7 @@ $app = new \Slim\App;
 $app->get('/locationByIP', function (Request $request, Response $response) {
 
     $queryParams = $request->getQueryParams();
-    $ip = (string)$queryParams['IP'];
+    $ip = isset($queryParams['IP']) ? (string)$queryParams['IP'] : '';
 
     try
     {
