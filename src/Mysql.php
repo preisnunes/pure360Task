@@ -1,20 +1,30 @@
 <?php
 
+namespace pureTask;
+
 use \Slim\PDO\Database;
 
 final class Mysql
 {
+    /**
+     * @var \Slim\PDO\Database
+     */
     private static $instance;
 
     private function __construct(){}
 
+    /**
+     * Get Slim PDO Instance
+     * @return Database
+     */
     public static function getInstance(){
 
-        if( self::$instance == null ){
-            self::$instance = new \Slim\PDO\Database(DATABASE, USER, PASSWORD);
+        if( self::$instance == null){
+            $dsn = 'mysql:host=' . HOST . ';dbname=' . DATABASE . ';charset=utf8';
+            self::$instance = new Database($dsn, USER, PASSWORD);
         }
 
-        return self::instance;
+        return self::$instance;
     }
 
 }
