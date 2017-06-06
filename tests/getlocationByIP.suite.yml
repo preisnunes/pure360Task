@@ -1,0 +1,4 @@
+actor: GetlocationByIPTester
+modules:
+    enabled:
+        - \Helper\GetlocationByIP
