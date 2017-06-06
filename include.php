@@ -1,15 +1,27 @@
 <?php
 
-require __DIR__ .  '/../vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
-require_once __DIR__ . '/../configsLoader.php';
+$srcDir = __DIR__ . '/src/';
 
-require_once 'functions.php';
+require_once $srcDir . 'Utils/functions.php';
 
-require_once 'CountryIpCsv.php';
+require_once $srcDir . 'CountryIpCsv.php';
 
-require_once 'CountryIpData.php';
+require_once $srcDir . 'CountryIpData.php';
 
-require_once 'Mysql.php';
+require_once  $srcDir . 'Mysql.php';
 
-require_once 'Command/PopulateCountriesIp.php';
+require_once $srcDir . 'Command/PopulateCountriesIp.php';
+
+function defineConstants(){
+
+    $constants = parse_ini_file('configs.ini');
+
+    foreach( $constants as $name => $value ){
+        define( strtoupper($name), $value );
+    }
+
+}
+
+defineConstants();
