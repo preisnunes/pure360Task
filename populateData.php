@@ -1,7 +1,12 @@
+#!/usr/bin/env php
 <?php
-/**
- * Created by PhpStorm.
- * User: pedronunes
- * Date: 06/06/17
- * Time: 00:48
- */
+
+require_once __DIR__ . '/include.php';
+
+use Symfony\Component\Console\Application;
+use pureTask\Command\PopulateCountriesIp;
+
+
+$application = new Application('PureTask', '1.0.0');
+$application->add( new PopulateCountriesIp());
+$application->run();
