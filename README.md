@@ -8,10 +8,6 @@ http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip
 The resource that allows the user to get the ip of a country is:
 locationByIP?IP=2.17.252.0
 
-## Getting Started
-
-To
-
 ### Prerequisites
 
 
