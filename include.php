@@ -14,6 +14,9 @@ require_once  $srcDir . 'Mysql.php';
 
 require_once $srcDir . 'Command/PopulateCountriesIp.php';
 
+/**
+ * Define Constants
+ */
 function defineConstants(){
 
     $constants = parse_ini_file('configs.ini');
