@@ -5,6 +5,7 @@ require __DIR__ . '/../include.php';
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
 use \pureTask\CountryIpCsv as CountryIpCsv;
+use \pureTask\CountryIpData as CountryIpData;
 use \pureTask\Mysql as Mysql;
 
 
@@ -21,10 +22,10 @@ $app->get('/locationByIP', function (Request $request, Response $response) {
     try
     {
         $db = Mysql::getInstance();
-
+        $table = CountryIpData::$tableName;
         $query = $db->prepare("SELECT * 
-            FROM ipcountry
-            WHERE ip_start = :ip");
+            FROM $table
+            WHERE INET_ATON(:ip) BETWEEN INET_ATON(ip_start) AND INET_ATON(ip_end)");
 
         $query->bindParam(':ip', $ip, PDO::PARAM_STR);
         $query->execute();
