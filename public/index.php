@@ -25,7 +25,7 @@ $app->get('/locationByIP', function (Request $request, Response $response) {
         $table = CountryIpData::$tableName;
         $query = $db->prepare("SELECT * 
             FROM $table
-            WHERE INET_ATON(:ip) BETWEEN INET_ATON(ip_start) AND INET_ATON(ip_end)");
+            WHERE INET_ATON(:ip) BETWEEN ip_int_start AND ip_int_end");
 
         $query->bindParam(':ip', $ip, PDO::PARAM_STR);
         $query->execute();

@@ -16,7 +16,14 @@ class CountryIpCsv{
      * Csv structure
      * @var array
      */
-    private $structure;
+    private $structure = [
+        'ipStart',
+        'ipEnd',
+        'ipIntStart',
+        'ipIntEnd',
+        'countryCode',
+        'country'
+    ];
 
     /**
      * Register Instance
@@ -36,10 +43,10 @@ class CountryIpCsv{
      * @param array $structure
      * @param $register
      */
-    public function __construct($csvPath, array $structure, $register){
+    public function __construct($csvPath, $register, array $structure = []){
 
         $this->csvPath = $csvPath;
-        $this->structure = $structure;
+        $this->setStructure($structure);
         $this->register = $register;
 
         $registerReflection = new \ReflectionMethod($register, '__construct');
@@ -48,6 +55,17 @@ class CountryIpCsv{
             $this->propertiesOrder[] = $parameter->getName();
         }
 
+    }
+
+    /**
+     * Set csv structure. id the array passed to the constructor is empty assume that
+     * structure initilized upper is the valid one
+     * @param array $structure
+     */
+    public function setStructure( $structure = []){
+        if( !empty($structure)){
+            $this->structure = $structure;
+        }
     }
 
     /**

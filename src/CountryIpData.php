@@ -23,13 +23,13 @@ class CountryIpData{
      * Longitude id
      * @var int
      */
-    protected $longitudeId;
+    protected $ipIntStart;
 
     /**
      * Latitude Id
      * @int
      */
-    protected $latitudeId;
+    protected $ipIntEnd;
 
     /**
      * Country Code
@@ -53,7 +53,7 @@ class CountryIpData{
      * Table columns order
      * @var array
      */
-    protected static $columns = ['ip_start', 'ip_end', 'longitude_id', 'latitude_id', 'country_code','country' ];
+    protected static $columns = ['ip_start', 'ip_end', 'ip_int_start', 'ip_int_end', 'country_code','country' ];
 
     /**
      * Set ipStart
@@ -88,35 +88,35 @@ class CountryIpData{
     }
 
     /**
-     * Set longitude id
+     * Set ip start representation as int
      * @param int $longitudeId
      */
-    public function setLongitudeId($longitudeId){
-        $this->longitudeId = (int)$longitudeId;
+    public function setIpIntStart($ipIntStart){
+        $this->ipIntStart = (int)$ipIntStart;
     }
 
     /**
-     * Get longitude id
+     * Get ip start representation as int
      * @return int
      */
-    public function getLongitudeId(){
-        return $this->longitudeId;
+    public function getIpIntStart(){
+        return $this->ipIntStart;
     }
 
     /**
      * Set latitude id
      * @param int $latitudeId
      */
-    public function setLatitudeId($latitudeId){
-        $this->latitudeId = (int)$latitudeId;
+    public function setIpIntEnd($ipIntEnd){
+        $this->ipIntEnd = (int)$ipIntEnd;
     }
 
     /**
      * Get latitude id
      * @return int
      */
-    public function getLatitudeId(){
-        return $this->latitudeId;
+    public function getIpIntEnd(){
+        return $this->ipIntEnd;
     }
 
     /**
@@ -151,12 +151,12 @@ class CountryIpData{
         return $this->country;
     }
 
-    public function __construct($ipStart, $ipEnd, $longitudeId, $latitudeId, $countryCode, $country){
+    public function __construct($ipStart, $ipEnd, $ipIntStart, $ipIntEnd, $countryCode, $country){
 
         $this->setIpStart($ipStart);
         $this->setIpEnd($ipEnd);
-        $this->setLongitudeId($longitudeId);
-        $this->setLatitudeId($latitudeId);
+        $this->setIpIntStart($ipIntStart);
+        $this->setIpIntEnd($ipIntEnd);
         $this->setCountryCode($countryCode);
         $this->setCountry($country);
     }
@@ -170,8 +170,8 @@ class CountryIpData{
         $values = [
             $this->getIpStart(),
             $this->getIpEnd(),
-            $this->getLongitudeId(),
-            $this->getLatitudeId(),
+            $this->getIpIntStart(),
+            $this->getIpIntEnd(),
             $this->getCountryCode(),
             $this->getCountry()
         ];

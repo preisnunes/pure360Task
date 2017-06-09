@@ -66,11 +66,7 @@ class PopulateCountriesIp extends Command
             $archivePath = downloadFile($url);
             $csvPath = unzipFile($archivePath);
 
-            if( !empty( $structure ) ){
-                $structure = ['ipStart', 'ipEnd', 'longitudeId', 'latitudeId', 'countryCode', 'country'];
-            }
-
-            $csv = new CountryIpCsv($csvPath,$structure,CountryIpData::getClassName());
+            $csv = new CountryIpCsv($csvPath,CountryIpData::getClassName(), $structure);
             $csv->loop();
             $output->writeln("$table table is populated");
 
